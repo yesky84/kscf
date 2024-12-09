@@ -1,3 +1,9 @@
+usa.visa.com:443#美国VISA
+myanmar.visa.com:8443#缅甸VISA
+www.visa.com.tw:2053#台湾VISA
+www.visaeurope.ch:2083#欧洲VISA
+www.visa.com.br:2087#BR_VISA
+www.visasoutheasteurope.com:2096#欧洲东南VISA
 108.162.198.154:443#13
 104.25.241.66:443#14
 190.93.246.35:443#15
