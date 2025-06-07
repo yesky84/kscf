@@ -3,3 +3,6 @@ IP-CIDR,192.168.0.0/24,no-resolve
 
 #直连域名
 DOMAIN,fnos.skyee.nyc.mn
+
+#目标端口
+DST-PORT,22
