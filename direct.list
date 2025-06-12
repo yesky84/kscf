@@ -1,6 +1,6 @@
 #安卓软件
 PROCESS-NAME,com.ss.android.ugc.aweme
-
+PROCESS-NAME,tv.danmaku.bili
 #直连ip段
 IP-CIDR,192.168.177.0/24,no-resolve
 IP-CIDR,192.168.101.0/24,no-resolve
