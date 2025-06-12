@@ -1,9 +1,10 @@
 #直连ip段
-IP-CIDR,192.168.0.0/24,no-resolve
+IP-CIDR,192.168.177.0/24,no-resolve
+IP-CIDR,192.168.101.0/24,no-resolve
 
 #直连域名
-DOMAIN,fnos.skyee.nyc.mn
-DOMAIN,ip.164746.xyz
+DOMAIN-SUFFIX,skyee.nyc.mn
+DOMAIN-SUFFIX,164746.xyz
 
 #目标端口
-DST-PORT,22
+
