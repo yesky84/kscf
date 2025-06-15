@@ -1,0 +1,218 @@
+{
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "store_fakeip": true,
+      "store_rdrc": true
+    },
+    "clash_api": {
+      "external_controller": "0.0.0.0:9090",
+      "external_ui": "ui",
+      "external_ui_download_url": "https://gh.orio.cloudns.biz/https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip",
+      "access_control_allow_origin": "",
+      "external_ui_download_detour": "direct"
+    }
+  },
+  "dns": {
+    "independent_cache": true,
+    "servers": [
+      {
+        "tag": "ali",
+        "type": "https",
+        "server": "223.5.5.5"
+      },
+      {
+        "tag": "fakeip",
+        "type": "fakeip",
+        "inet4_range": "198.18.0.0/15",
+        "inet6_range": "fc00::/18"
+      },
+      {
+        "tag": "google",
+        "type": "udp",
+        "server": "8.8.8.8",
+	      "server_port": 53
+
+      }
+    ],
+    "rules": [
+      {
+        "clash_mode": "Direct",
+        "server": "ali"
+      },
+      {
+        "clash_mode": "Global",
+        "server": "fakeip"
+      },
+      {
+        "rule_set": "AWAvenue-Ads-Rule",
+        "action": "reject"
+      },
+      {
+        "rule_set": "geosite-cn",
+        "server": "ali"
+      },
+      {
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "server": "fakeip"
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "address": [
+        "172.18.0.1/30",
+        "fdfe:dcba:9876::1/126"
+      ],
+      "auto_route": true,
+      "strict_route": true
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "vless",
+      "tag": "优选",
+      "server": "104.17.209.110",
+      "server_port": 443,
+      "uuid": "8d5a6d63-14e0-4882-a58e-67237276706b",
+      "transport": {
+	    "path": "/?ed=2560",
+      "type": "ws",
+	    "headers": {
+        "Host": "b.orio.cloudns.biz"
+	}
+      },
+      "tls": {
+	   "enabled": true,
+	   "server_name": "b.orio.cloudns.biz",
+	   "insecure": true
+      }
+
+    },
+    {
+      "type": "vless",
+      "tag": "CFnat",
+      "server": "192.168.101.62",
+      "server_port": 1234,
+      "uuid": "8d5a6d63-14e0-4882-a58e-67237276706b",
+      "transport": {
+	    "path": "/?ed=2560",
+	    "type": "ws",
+	    "headers": {
+        "Host": "b.orio.cloudns.biz"
+	    }
+    },
+      "tls": {
+	    "enabled": true,
+	    "server_name": "b.orio.cloudns.biz",
+	    "insecure": true
+      }
+
+    },
+    {
+      "tag": "default",
+      "type": "selector",
+      "outbounds": [
+        "auto",
+        "select",
+        "direct",
+	      "CFnat",
+	      "优选"
+      ]
+    },
+    {
+      "tag": "auto",
+      "type": "urltest",
+      "outbounds": ["CFnat", "优选"]
+    },
+    {
+      "tag": "select",
+      "type": "selector",
+      "outbounds": ["CFnat", "优选"]
+    },
+    {
+      "tag": "direct",
+      "type": "direct"
+    }
+  ],
+  "route": {
+    "default_domain_resolver": {
+      "server": "ali"
+    },
+    "auto_detect_interface": true,
+    "rules": [
+      {
+        "action": "sniff"
+      },
+      {
+        "protocol": "dns",
+        "action": "hijack-dns"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "Direct",
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "Global",
+        "outbound": "default"
+      },
+      {
+        "rule_set": "AWAvenue-Ads-Rule",
+        "action": "reject"
+      },
+      {
+        "rule_set": "ai_non_ip",
+        "outbound": "ai"
+      },
+      {
+        "rule_set": [
+          "geosite-cn",
+          "geoip-cn"
+        ],
+        "outbound": "direct"
+      }
+    ],
+    "rule_set": [
+      {
+        "tag": "AWAvenue-Ads-Rule",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://gh.orio.cloudns.biz/https://raw.github.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Singbox-regex.srs",
+	"download_detour": "direct"
+      },
+      {
+        "tag": "ai_non_ip",
+        "type": "remote",
+        "format": "source",
+        "url": "https://ruleset.skk.moe/sing-box/non_ip/ai.json",
+	"download_detour": "direct"
+      },
+      {
+        "tag": "geosite-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://gh.orio.cloudns.biz/https://raw.github.com/lyc8503/sing-box-rules/rule-set-geosite/geosite-cn.srs",
+	"download_detour": "direct"
+      },
+      {
+        "tag": "geoip-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://gh.orio.cloudns.biz/https://raw.github.com/lyc8503/sing-box-rules/rule-set-geoip/geoip-cn.srs",
+	"download_detour": "direct"
+      }
+    ]
+  }
+}
