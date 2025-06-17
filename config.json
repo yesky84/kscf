@@ -94,12 +94,12 @@
 	    "path": "/?ed=2560",
       "type": "ws",
 	    "headers": {
-        "Host": "b.skyee.ggff.net"
+        "Host": "b.eac.dpdns.org"
 	}
       },
       "tls": {
 	   "enabled": true,
-	   "server_name": "b.skyee.ggff.net",
+	   "server_name": "b.eac.dpdns.org",
 	   "insecure": true
       }
 
@@ -114,12 +114,12 @@
 	    "path": "/?ed=2560",
 	    "type": "ws",
 	    "headers": {
-        "Host": "b.skyee.ggff.net"
+        "Host": "b.eac.dpdns.org"
 	    }
     },
       "tls": {
 	    "enabled": true,
-	    "server_name": "b.skyee.ggff.net",
+	    "server_name": "b.eac.dpdns.org",
 	    "insecure": true
       }
 
