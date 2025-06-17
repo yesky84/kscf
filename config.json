@@ -89,17 +89,17 @@
       "tag": "优选",
       "server": "104.17.209.110",
       "server_port": 443,
-      "uuid": "8d5a6d63-14e0-4882-a58e-67237276706b",
+      "uuid": "97e561da-d494-4f2b-b223-cebd2ae52f89",
       "transport": {
 	    "path": "/?ed=2560",
       "type": "ws",
 	    "headers": {
-        "Host": "b.orio.cloudns.biz"
+        "Host": "b.skyee.ggff.net"
 	}
       },
       "tls": {
 	   "enabled": true,
-	   "server_name": "b.orio.cloudns.biz",
+	   "server_name": "b.skyee.ggff.net",
 	   "insecure": true
       }
 
@@ -109,17 +109,17 @@
       "tag": "CFnat",
       "server": "192.168.101.62",
       "server_port": 1234,
-      "uuid": "8d5a6d63-14e0-4882-a58e-67237276706b",
+      "uuid": "97e561da-d494-4f2b-b223-cebd2ae52f89",
       "transport": {
 	    "path": "/?ed=2560",
 	    "type": "ws",
 	    "headers": {
-        "Host": "b.orio.cloudns.biz"
+        "Host": "b.skyee.ggff.net"
 	    }
     },
       "tls": {
 	    "enabled": true,
-	    "server_name": "b.orio.cloudns.biz",
+	    "server_name": "b.skyee.ggff.net",
 	    "insecure": true
       }
 
