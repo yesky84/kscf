@@ -67,7 +67,8 @@
         "rule_set": [
           "lyc8503YT",
           "lyc8503GLE",
-	  "lyc8503GITHUB"
+	  "lyc8503GITHUB",
+	  "lyc8503DOCKER"
         ],
         "server": "fakeip"
       }
@@ -195,7 +196,8 @@
         "rule_set": [
           "lyc8503GLE",
           "lyc8503YT",
-	  "lyc8503GITHUB"
+	  "lyc8503GITHUB",
+	  "lyc8503DOCKER"
         ],
         "outbound": "select"
       }      
@@ -255,6 +257,12 @@
         "type": "remote",
         "format": "binary",
         "url": "https://gh.eac.dpdns.org/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-github.srs",
+	"download_detour": "direct" 
+      },
+        "tag": "lyc8503DOCKER",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://gh.eac.dpdns.org/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-docker.srs",
 	"download_detour": "direct" 
       }
     ]    
