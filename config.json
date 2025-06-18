@@ -259,7 +259,8 @@
         "url": "https://gh.eac.dpdns.org/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-github.srs",
 	"download_detour": "direct" 
       },
-        "tag": "lyc8503DOCKER",
+      { 
+	"tag": "lyc8503DOCKER",
         "type": "remote",
         "format": "binary",
         "url": "https://gh.eac.dpdns.org/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-docker.srs",
