@@ -12,7 +12,7 @@
     "clash_api": {
       "external_controller": "0.0.0.0:9090",
       "external_ui": "ui",
-      "external_ui_download_url": "https://gh.orio.cloudns.biz/https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip",
+      "external_ui_download_url": "https://gh.eac.dpdns.org/https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip",
       "access_control_allow_origin": "",
       "external_ui_download_detour": "direct"
     }
@@ -207,7 +207,7 @@
         "tag": "AWAvenue-Ads-Rule",
         "type": "remote",
         "format": "binary",
-        "url": "https://gh.orio.cloudns.biz/https://raw.github.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Singbox-regex.srs",
+        "url": "https://gh.eac.dpdns.org/https://raw.github.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Singbox-regex.srs",
 	"download_detour": "direct"
       },
       {
@@ -221,42 +221,42 @@
         "tag": "geosite-cn",
         "type": "remote",
         "format": "binary",
-        "url": "https://gh.orio.cloudns.biz/https://raw.github.com/lyc8503/sing-box-rules/rule-set-geosite/geosite-cn.srs",
+        "url": "https://gh.eac.dpdns.org/https://raw.github.com/lyc8503/sing-box-rules/rule-set-geosite/geosite-cn.srs",
 	"download_detour": "direct"
       },
       {
         "tag": "geoip-cn",
         "type": "remote",
         "format": "binary",
-        "url": "https://gh.orio.cloudns.biz/https://raw.github.com/lyc8503/sing-box-rules/rule-set-geoip/geoip-cn.srs",
+        "url": "https://gh.eac.dpdns.org/https://raw.github.com/lyc8503/sing-box-rules/rule-set-geoip/geoip-cn.srs",
 	"download_detour": "direct"
       },
       {
         "tag": "LoyalsoldierAd",
         "type": "remote",
         "format": "binary",
-        "url": "https://gh.orio.cloudns.biz/https://github.com/Loyalsoldier/geoip/raw/refs/heads/release/srs/ad.srs",
+        "url": "https://gh.eac.dpdns.org/https://github.com/Loyalsoldier/geoip/raw/refs/heads/release/srs/ad.srs",
 	"download_detour": "direct"
       },
       {
         "tag": "lyc8503CN",
         "type": "remote",
         "format": "binary",
-        "url": "https://gh.orio.cloudns.biz/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-china-list.srs",
+        "url": "https://gh.eac.dpdns.org/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-china-list.srs",
 	"download_detour": "direct"
       },
       {
         "tag": "lyc8503YT",
         "type": "remote",
         "format": "binary",
-        "url": "https://gh.orio.cloudns.biz/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-youtube.srs",
+        "url": "https://gh.eac.dpdns.org/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-youtube.srs",
 	"download_detour": "direct"                     
       },
       {
         "tag": "lyc8503GLE",
         "type": "remote",
         "format": "binary",
-        "url": "https://gh.orio.cloudns.biz/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-google.srs",
+        "url": "https://gh.eac.dpdns.org/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-google.srs",
 	"download_detour": "direct" 
       }                    
     ]    
