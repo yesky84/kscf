@@ -66,7 +66,8 @@
         ],
         "rule_set": [
           "lyc8503YT",
-          "lyc8503GLE"
+          "lyc8503GLE",
+	  "lyc8503GITHUB"
         ],
         "server": "fakeip"
       }
@@ -183,10 +184,6 @@
         "action": "reject"
       },
       {
-        "rule_set": "ai_non_ip",
-        "outbound": "ai"
-      },
-      {
         "rule_set": [
           "geosite-cn",
           "geoip-cn",
@@ -197,7 +194,8 @@
       {
         "rule_set": [
           "lyc8503GLE",
-          "lyc8503YT"
+          "lyc8503YT",
+	  "lyc8503GITHUB"
         ],
         "outbound": "select"
       }      
@@ -208,13 +206,6 @@
         "type": "remote",
         "format": "binary",
         "url": "https://gh.eac.dpdns.org/https://raw.github.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Singbox-regex.srs",
-	"download_detour": "direct"
-      },
-      {
-        "tag": "ai_non_ip",
-        "type": "remote",
-        "format": "source",
-        "url": "https://ruleset.skk.moe/sing-box/non_ip/ai.json",
 	"download_detour": "direct"
       },
       {
@@ -258,7 +249,14 @@
         "format": "binary",
         "url": "https://gh.eac.dpdns.org/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-google.srs",
 	"download_detour": "direct" 
-      }                    
+      },
+      {
+        "tag": "lyc8503GITHUB",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://gh.eac.dpdns.org/https://github.com/lyc8503/sing-box-rules/raw/refs/heads/rule-set-geosite/geosite-github.srs",
+	"download_detour": "direct" 
+      }
     ]    
   }
 }
