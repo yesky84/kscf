@@ -206,7 +206,7 @@
         "rule_set": [
           "lyc8503GLE",
           "lyc8503YT",
-          "github"
+          "github_site"
         ],
         "outbound": "手动选择"
       }      
