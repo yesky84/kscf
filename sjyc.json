@@ -231,8 +231,7 @@
       { "tag": "googleAD_ip", "type": "remote", "format": "binary", "url": "https://gh.eac.dpdns.org/https://raw.githubusercontent.com/lyc8503/sing-box-rules/refs/heads/rule-set-geoip/geoip-ad.srs", "download_detour": "direct" },
       { "tag": "jdAD_site", "type": "remote", "format": "binary", "url": "https://gh.eac.dpdns.org/https://raw.githubusercontent.com/lyc8503/sing-box-rules/refs/heads/rule-set-geosite/geosite-jd-ads.srs", "download_detour": "direct" },
       { "tag": "iqiyiAD_site", "type": "remote", "format": "binary", "url": "https://gh.eac.dpdns.org/https://raw.githubusercontent.com/lyc8503/sing-box-rules/refs/heads/rule-set-geosite/geosite-iqiyi-ads.srs", "download_detour": "direct" },
-      { "tag": "google@AD_site", "type": "remote", "format": "binary", "url": "https://gh.eac.dpdns.org/https://raw.githubusercontent.com/lyc8503/sing-box-rules/refs/heads/rule-set-geosite/geosite-google@ads.srs", "download_detour": "direct" },
-      { "tag": "github_site", "type": "remote", "format": "binary", "url": "https://gh.eac.dpdns.org/https://raw.githubusercontent.com/lyc8503/sing-box-rules/refs/heads/rule-set-geosite/geosite-github.srs", "download_detour": "direct" }                                
+      { "tag": "google@AD_site", "type": "remote", "format": "binary", "url": "https://gh.eac.dpdns.org/https://raw.githubusercontent.com/lyc8503/sing-box-rules/refs/heads/rule-set-geosite/geosite-google@ads.srs", "download_detour": "direct" }                             
     ]    
   }
 }
