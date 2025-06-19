@@ -70,7 +70,8 @@
         "rule_set": [
           "lyc8503YT",
           "lyc8503GLE",
-          "github_site"
+          "github_site",
+	  "docker_site"
         ],
         "server": "fakeip"
       }
@@ -206,7 +207,8 @@
         "rule_set": [
           "lyc8503GLE",
           "lyc8503YT",
-          "github_site"
+          "github_site",
+	  "docker_site"
         ],
         "outbound": "手动选择"
       }      
