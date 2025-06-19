@@ -74,6 +74,12 @@
 	  "docker_site"
         ],
         "server": "fakeip"
+      },
+      {
+	"domain_suffix": [
+	  "dpdns.org"
+	],
+	"server": "google"
       }
     ]
   },
