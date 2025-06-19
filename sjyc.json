@@ -88,7 +88,7 @@
       "stack": "system",
       "platform": {
 	"http_proxy": {
-	  "enable": true,
+	  "enabled": true,
 	  "server": "127.0.0.1",
 	  "server_port": 7890	
         }
