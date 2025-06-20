@@ -218,6 +218,9 @@
           "geoip-cn",
           "lyc8503CN"
         ],
+	"domain_suffix": [
+	  ".dpdns.org"	
+	],      
         "outbound": "direct"
       },
       {
