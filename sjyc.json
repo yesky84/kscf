@@ -12,7 +12,7 @@
     "clash_api": {
       "external_controller": "0.0.0.0:9090",
       "external_ui": "ui",
-      "external_ui_download_url": "https://gh.orio.cloudns.biz/https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip",
+      "external_ui_download_url": "https://gh.eac.dpdns.org/https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip",
       "access_control_allow_origin": "",
       "external_ui_download_detour": "direct"
     }
@@ -22,8 +22,14 @@
     "servers": [
       {
         "tag": "ali",
-        "type": "https",
+        "type": "udp",
         "server": "223.5.5.5"
+      },
+      {
+         "tag": "ali_tls",
+	 "type": "https",
+	 "server": "dns.alidns.com",
+	 "domain_resolver": "ali"
       },
       {
         "tag": "fakeip",
@@ -33,16 +39,17 @@
       },
       {
         "tag": "google",
-        "type": "udp",
-        "server": "8.8.8.8",
-	      "server_port": 53
-
+        "type": "https",
+        "server": "dns.google",
+	"server_port": 443,
+        "domain_resolver": "ali",
+	"detour": "自动选择"
       }
     ],
     "rules": [
       {
         "clash_mode": "Direct",
-        "server": "ali"
+        "server": "ali_tls"
       },
       {
         "clash_mode": "Global",
@@ -60,7 +67,7 @@
           "geosite-cn",
           "lyc8503CN"
         ],
-        "server": "ali"
+        "server": "ali_tls"
       },
       {
         "query_type": [
@@ -81,7 +88,11 @@
 	],
 	"server": "google"
       }
-    ]
+    ],
+    "final": "google",
+    "strategy": "prefer_ipv4",
+    "disable_cache": false,
+    "disable_expire": false	  
   },
   "inbounds": [
     {
@@ -104,7 +115,7 @@
     {
      "tag": "mixed-in",
      "type": "mixed",
-     "listen": "127.0.0.1",
+     "listen": "0.0.0.0",
      "listen_port": 7890 	    
     }
   ],
@@ -219,6 +230,7 @@
         "outbound": "手动选择"
       }      
     ],
+    "final": "手动选择"，	  
     "rule_set": [
       { "tag": "AWAvenue-Ads-Rule", "type": "remote", "format": "binary", "url": "https://gh.eac.dpdns.org/https://raw.github.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Singbox-regex.srs", "download_detour": "direct" },
       { "tag": "ai_non_ip", "type": "remote", "format": "source", "url": "https://ruleset.skk.moe/sing-box/non_ip/ai.json", "download_detour": "direct" },
