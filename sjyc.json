@@ -230,7 +230,7 @@
         "outbound": "手动选择"
       }      
     ],
-    "final": "手动选择"，	  
+    "final": "手动选择",
     "rule_set": [
       { "tag": "AWAvenue-Ads-Rule", "type": "remote", "format": "binary", "url": "https://gh.eac.dpdns.org/https://raw.github.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Singbox-regex.srs", "download_detour": "direct" },
       { "tag": "ai_non_ip", "type": "remote", "format": "source", "url": "https://ruleset.skk.moe/sing-box/non_ip/ai.json", "download_detour": "direct" },
