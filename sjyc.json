@@ -121,6 +121,8 @@
   ],
   "outbounds": [
     { "type": "vless", "tag": "优选", "server": "104.17.209.110", "server_port": 443, "uuid": "e96cec71-856d-40c4-a7a2-e37638147715", "transport": { "path": "/?ed=2560", "type": "ws", "headers": { "Host": "b.eac.dpdns.org" } }, "tls": { "enabled": true, "server_name": "b.eac.dpdns.org", "insecure": true } },
+    { "type": "vless", "tag": "优选美国", "server": "172.64.152.25", "server_port": 443, "uuid": "e96cec71-856d-40c4-a7a2-e37638147715", "transport": { "path": "/?ed=2560", "type": "ws", "headers": { "Host": "b.eac.dpdns.org" } }, "tls": { "enabled": true, "server_name": "b.eac.dpdns.org", "insecure": true } },
+    { "type": "vless", "tag": "香港", "server": "104.19.145.64", "server_port": 443, "uuid": "e96cec71-856d-40c4-a7a2-e37638147715", "transport": { "path": "/?ed=2560", "type": "ws", "headers": { "Host": "b.eac.dpdns.org" } }, "tls": { "enabled": true, "server_name": "b.eac.dpdns.org", "insecure": true } },	  
     { "type": "vless", "tag": "CFnat", "server": "192.168.101.62", "server_port": 1234, "uuid": "e96cec71-856d-40c4-a7a2-e37638147715", "transport": { "path": "/?ed=2560", "type": "ws", "headers": { "Host": "b.eac.dpdns.org" } }, "tls": { "enabled": true, "server_name": "b.eac.dpdns.org", "insecure": true } },
     { "type": "vless", "tag": "CFnatus", "server": "192.168.101.62", "server_port": 2234, "uuid": "e96cec71-856d-40c4-a7a2-e37638147715", "transport": { "path": "/?ed=2560", "type": "ws", "headers": { "Host": "b.eac.dpdns.org" } }, "tls": { "enabled": true, "server_name": "b.eac.dpdns.org", "insecure": true } },	  
     { "type": "vless", "tag": "V6CFnat", "server": "fnos.skyee.nyc.mn", "server_port": 1234, "uuid": "e96cec71-856d-40c4-a7a2-e37638147715", "transport": { "path": "/?ed=2560", "type": "ws", "headers": { "Host": "b.eac.dpdns.org" } }, "tls": { "enabled": true, "server_name": "b.eac.dpdns.org", "insecure": true } },
@@ -160,18 +162,20 @@
         "手动选择",
 	"CFnat",
 	"CFnatus", 
-	"优选"
+	"优选",
+	"优选美国", 
+	"香港", 
       ]
     },
     {
       "tag": "自动选择",
       "type": "urltest",
-      "outbounds": ["CFnatus", "CFnat", "优选", "V6CFnat", "优选美国VISA", "优选缅甸VISA", "优选台湾VISA", "优选欧洲VISA", "优选BR_VISA", "优选欧洲东南VISA", "哈萨克斯坦", "葡萄牙", "哥斯达黎加", "泰国1", "泰国2", "泰国3", "美国1", "美国2", "美国3", "美国4", "美国5", "美国6", "美国7", "美国8", "美国9", "美国10", "美国11", "美国12", "美国13", "美国14", "美国15"]
+      "outbounds": ["CFnatus", "优选美国", "香港", "CFnat", "优选", "V6CFnat", "优选美国VISA", "优选缅甸VISA", "优选台湾VISA", "优选欧洲VISA", "优选BR_VISA", "优选欧洲东南VISA", "哈萨克斯坦", "葡萄牙", "哥斯达黎加", "泰国1", "泰国2", "泰国3", "美国1", "美国2", "美国3", "美国4", "美国5", "美国6", "美国7", "美国8", "美国9", "美国10", "美国11", "美国12", "美国13", "美国14", "美国15"]
     },
     {
       "tag": "手动选择",
       "type": "selector",
-      "outbounds": ["CFnatus", "CFnat", "优选", "V6CFnat", "优选美国VISA", "优选缅甸VISA", "优选台湾VISA", "优选欧洲VISA", "优选BR_VISA", "优选欧洲东南VISA", "哈萨克斯坦", "葡萄牙", "哥斯达黎加", "泰国1", "泰国2", "泰国3", "美国1", "美国2", "美国3", "美国4", "美国5", "美国6", "美国7", "美国8", "美国9", "美国10", "美国11", "美国12", "美国13", "美国14", "美国15"]
+      "outbounds": ["CFnatus", "CFnat", "优选", "优选美国", "香港", "V6CFnat", "优选美国VISA", "优选缅甸VISA", "优选台湾VISA", "优选欧洲VISA", "优选BR_VISA", "优选欧洲东南VISA", "哈萨克斯坦", "葡萄牙", "哥斯达黎加", "泰国1", "泰国2", "泰国3", "美国1", "美国2", "美国3", "美国4", "美国5", "美国6", "美国7", "美国8", "美国9", "美国10", "美国11", "美国12", "美国13", "美国14", "美国15"]
     },
     {
       "tag": "direct",
