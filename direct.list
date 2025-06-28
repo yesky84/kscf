@@ -8,6 +8,7 @@ IP-CIDR,192.168.101.0/24,no-resolve
 #直连域名
 DOMAIN-SUFFIX,skyee.nyc.mn
 DOMAIN-SUFFIX,164746.xyz
+DOMAIN-SUFFIX,yudou66.top
 
 #目标端口
 
