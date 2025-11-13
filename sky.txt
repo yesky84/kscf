@@ -1,6 +1,6 @@
-2606:4700:964e::618d:4e95:443#V6移动-1
-2606:4700:9a9f::25cd:1e9b:443#V6移动-2
-2606:4700:9ade::5c7f:78f9:443#V6移动-3
+yx1.skyeece.dpdns.org:443#V6移动-1
+yx2.skyeece.dpdns.org:443#V6移动-2
+yx3.skyeece.dpdns.org:443#V6移动-3
 usa.visa.com:443#美国VISA
 myanmar.visa.com:8443#缅甸VISA
 www.visa.com.tw:2053#台湾VISA
