@@ -1,142 +1,140 @@
-name: Build VIKINGYFY ImmortalWRT Kmods
+name: Build LibWrt for JDY Arthur (IPQ60XX)
 
 on:
   workflow_dispatch:
     inputs:
-      commit_hash:
-        description: 'Commit Hash or Tag (e.g., fcbac91)'
+      branch:
+        description: 'LibWrt 分支'
         required: true
-        default: 'fcbac91'
+        default: '25.12-nss'
+        type: string
+      device_target:
+        description: '目标平台 (IPQ60XX)'
+        required: true
+        default: 'qualcommax'
+        type: string
+      device_subtarget:
+        description: '子平台型号'
+        required: true
+        default: 'ipq60xx'
+        type: string
+      device_profile:
+        description: '设备 Profile (京东云亚瑟)'
+        required: true
+        default: 'jdcloud_ax1800-pro'
+        type: string
 
 env:
-  REPO_URL: https://github.com/VIKINGYFY/immortalwrt
-  TARGET: qualcommax/ipq60xx
+  TZ: Asia/Shanghai
+  REPO_URL: https://github.com/LiBwrt/LibWrt.git
+  UPLOAD_FIRMWARE: true
+  UPLOAD_RELEASE: true
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          swap-storage: true
-
-      - name: Install Dependencies
+      - name: Initialize Environment
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential clang flex bison g++ gawk \
-            gcc-multilib g++-multilib gettext git libncurses-dev libssl-dev \
-            python3-setuptools rsync swig unzip zlib1g-dev \
-            file wget qemu-utils python3-pip
-          
-          pip3 install --break-system-packages setuptools distutils-precedence 2>/dev/null || true
+          sudo timedatectl set-timezone "$TZ"
+          sudo mkdir -p /workdir
+          sudo chown $USER:$GROUPS /workdir
+          df -hT
 
-      - name: Clone Source Code & Verify Commit
+      - name: Setup Build Dependencies
         run: |
-          COMMIT="${{ github.event.inputs.commit_hash }}"
-          echo "🔍 Target commit/tag: $COMMIT"
-          echo "📦 Source: $REPO_URL"
-          
-          git clone --filter=blob:none --no-checkout $REPO_URL openwrt
-          cd openwrt
-          
-          if git cat-file -e "$COMMIT^{commit}" 2>/dev/null; then
-            echo "✅ Commit found, checking out..."
-            git checkout "$COMMIT"
-          else
-            echo "❌ Commit '$COMMIT' not found in VIKINGYFY/immortalwrt!"
-            echo "📋 Recent available tags:"
-            git tag --sort=-creatordate | head -15
-            exit 1
-          fi
-          
-          echo "Current HEAD: $(git rev-parse HEAD)"
+          sudo apt-get update -qq
+          sudo apt-get install -y \
+            ack antlr3 asciidoc autoconf automake autopoint binutils bison \
+            build-essential bzip2 ccache cmake cpio curl device-tree-compiler \
+            fastjar flex gawk gettext gcc-multilib g++-multilib git gperf \
+            haveged help2man intltool libc6-dev-i386 libelf-dev libfuse-dev \
+            libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev \
+            libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev \
+            libssl-dev libtool lrzsz mkisofs msmtp ninja-build p7zip p7zip-full \
+            patch pkgconf python3 python3-pyelftools python3-setuptools \
+            qemu-utils rsync scons squashfs-tools subversion swig texinfo \
+            uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev zstd
+          sudo apt-get autoremove --purge -y
+          sudo apt-get clean
 
-      - name: Update Feeds
+      - name: Clone LibWrt Source
+        working-directory: /workdir
         run: |
-          cd openwrt
+          git clone --depth 1 -b ${{ github.event.inputs.branch }} $REPO_URL openwrt
+          ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
+      - name: Update Feeds & Install Packages
+        working-directory: openwrt
+        run: |
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
-      - name: Generate Config & Find Kmods
+      - name: Generate Default Config for JDY Arthur
+        working-directory: openwrt
         run: |
-          cd openwrt
-          make defconfig
-          
-          # 注入目标架构
-          cat >> .config <<EOF
-          CONFIG_TARGET_qualcommax=y
-          CONFIG_TARGET_qualcommax_ipq60xx=y
+          cat > .config << EOF
+          CONFIG_TARGET_${{ github.event.inputs.device_target }}=y
+          CONFIG_TARGET_${{ github.event.inputs.device_target }}_${{ github.event.inputs.device_subtarget }}=y
+          CONFIG_TARGET_${{ github.event.inputs.device_target }}_${{ github.event.inputs.device_subtarget }}_DEVICE_${{ github.event.inputs.device_profile }}=y
+          CONFIG_NSS_DRV=y
+          CONFIG_NSS_FIRMWARE_VERSION_11_4=y
           EOF
           make defconfig
-          
-          echo "=========================================="
-          echo "🔍 Searching for XDP/BPF related kmods..."
-          echo "=========================================="
-          
-          echo "📋 Matching symbols in current .config:"
-          grep -iE 'CONFIG_PACKAGE_kmod.*(xdp|bpf|sched)' .config || echo "(None matched in .config)"
-          
-          echo ""
-          echo "📋 Available kmod Makefiles containing xdp/bpf/sched:"
-          find package target -name Makefile -exec grep -lE 'PKG_NAME.*kmod.*(xdp|bpf|sched)' {} \; 2>/dev/null || echo "(No matching Makefiles found)"
-          
-          echo ""
-          echo "📋 Kernel config symbols (XDP/BPF/SCHED):"
-          grep -iE '(XDP_SOCKETS|BPF_SYSCALL|SCHED_BPF|NET_SCHED)' target/linux/qualcommax/config-* 2>/dev/null || echo "(Not found in kernel config)"
-          echo "=========================================="
 
-      - name: Compile Kmods (Adaptive)
+      - name: Download Packages
+        working-directory: openwrt
         run: |
-          cd openwrt
-          
-          # 候选包名列表（按优先级排列）
-          CANDIDATES=(
-            "kmod-xdp-sockets-diag"
-            "kmod-xdp"
-            "kmod-bpf"
-            "kmod-sched-bpf"
-            "kmod-sched-core"
-            "kmod-net-sched"
-          )
-          
-          COMPILED=0
-          for pkg in "${CANDIDATES[@]}"; do
-            # 检查包是否存在于源码树中
-            if find package target -name Makefile -exec grep -l "PKG_NAME:=${pkg}" {} \; 2>/dev/null | grep -q .; then
-              echo "✅ Found $pkg, compiling..."
-              if make package/${pkg}/compile -j$(nproc) V=s || make package/${pkg}/compile -j1 V=s; then
-                COMPILED=$((COMPILED + 1))
-              else
-                echo "⚠️ Failed to compile $pkg"
-              fi
-            else
-              echo "⏭️ Skipping $pkg (not found in source tree)"
-            fi
-          done
-          
-          if [ "$COMPILED" -eq 0 ]; then
-            echo "❌ ERROR: No matching kmod packages were found or compiled!"
-            echo "💡 This likely means these modules are either built-in to the kernel"
-            echo "   or not yet defined as separate kmod packages in this commit."
-            echo "   Please check the 'Find Kmods' step output above."
-            exit 1
-          fi
-          
-          echo "✅ Successfully compiled $COMPILED kmod package(s)"
+          make download -j$(nproc)
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
 
-      - name: Upload Artifacts
+      - name: Compile Firmware
+        id: compile
+        working-directory: openwrt
+        run: |
+          echo "🚀 Start compiling at $(date)"
+          make -j$(($(nproc) + 1)) || make -j1 V=s
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "🎉 Compile finished at $(date)"
+
+      - name: Organize Output Files
+        if: steps.compile.outputs.status == 'success'
+        run: |
+          mkdir -p output
+          cp -rf openwrt/bin/targets/*/*/*.bin output/ 2>/dev/null || true
+          cp -rf openwrt/bin/targets/*/*/*.ubi output/ 2>/dev/null || true
+          cp -rf openwrt/bin/targets/*/*/*.tar output/ 2>/dev/null || true
+          # 生成 SHA256 校验
+          cd output && sha256sum * > sha256sums.txt
+          echo "FILE_DATE=$(date +%Y%m%d-%H%M)" >> $GITHUB_ENV
+
+      - name: Upload Firmware to Artifacts
+        if: env.UPLOAD_FIRMWARE == 'true' && steps.compile.outputs.status == 'success'
         uses: actions/upload-artifact@v4
         with:
-          name: ImmortalWRT-Kmods-${{ github.event.inputs.commit_hash }}
-          path: openwrt/bin/targets/qualcommax/ipq60xx/packages/*.apk
-          if-no-files-found: warn
+          name: LibWrt-JDY-Arthur-${{ env.FILE_DATE }}
+          path: output/
+
+      - name: Create Release
+        if: env.UPLOAD_RELEASE == 'true' && steps.compile.outputs.status == 'success'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: LibWrt-JDY-${{ env.FILE_DATE }}
+          name: LibWrt 京东云亚瑟 (IPQ60XX) ${{ env.FILE_DATE }}
+          body: |
+            ## 🔧 编译信息
+            - **源码**: [LiBwrt/LibWrt](${{ env.REPO_URL }})
+            - **分支**: `${{ github.event.inputs.branch }}`
+            - **设备**: 京东云亚瑟 (IPQ60XX / ${{ github.event.inputs.device_profile }})
+            - **NSS**: 满血支持 (NSS_DRV + FW 11.4)
+            - **默认IP**: 192.168.1.1 (无密码)
+          files: output/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
