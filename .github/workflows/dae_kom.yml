@@ -39,11 +39,17 @@ jobs:
           pip3 install --break-system-packages setuptools distutils-precedence 2>/dev/null || true
       - name: Clone Source Code
         run: |
-          git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+          # 不使用 --depth 1 和 -b，直接克隆仓库以获取完整历史
+          # 如果仓库太大导致超时，可改用 git clone --filter=blob:none 进行部分克隆
+          git clone $REPO_URL openwrt
           cd openwrt
-          # 切换到指定的 commit，确保内核版本和 vermagic 完全匹配
-          git fetch --depth 1 origin $COMMIT_HASH
+          
+          # 精确切换到目标 commit
           git checkout $COMMIT_HASH
+          
+          # 验证 commit 是否正确
+          echo "Current HEAD:"
+          git rev-parse HEAD
 
       - name: Update Feeds
         run: |
