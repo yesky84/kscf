@@ -1,15 +1,16 @@
-name: Build ImmortalWRT Kmods
+name: Build VIKINGYFY ImmortalWRT Kmods
 
 on:
   workflow_dispatch:
     inputs:
       commit_hash:
-        description: 'ImmortalWRT Commit Hash or Tag (e.g., fcbac91 or v24.10.0)'
+        description: 'Commit Hash or Tag (e.g., fcbac91)'
         required: true
         default: 'fcbac91'
 
 env:
-  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  # ⚠️ 关键修改：指向 VIKINGYFY 的 Fork 仓库
+  REPO_URL: https://github.com/VIKINGYFY/immortalwrt
   TARGET: qualcommax/ipq60xx
 
 jobs:
@@ -38,28 +39,24 @@ jobs:
             python3-setuptools rsync swig unzip zlib1g-dev \
             file wget qemu-utils python3-pip
           
-          # Ubuntu 24.04+ 兼容处理
           pip3 install --break-system-packages setuptools distutils-precedence 2>/dev/null || true
 
       - name: Clone Source Code & Verify Commit
         run: |
           COMMIT="${{ github.event.inputs.commit_hash }}"
           echo "🔍 Target commit/tag: $COMMIT"
+          echo "📦 Source: $REPO_URL"
           
-          # 使用 partial clone 加速，同时保留所有 refs
           git clone --filter=blob:none --no-checkout $REPO_URL openwrt
           cd openwrt
           
-          # 验证 commit 是否存在
           if git cat-file -e "$COMMIT^{commit}" 2>/dev/null; then
             echo "✅ Commit found, checking out..."
             git checkout "$COMMIT"
           else
-            echo "❌ Commit '$COMMIT' not found in repository!"
+            echo "❌ Commit '$COMMIT' not found in VIKINGYFY/immortalwrt!"
             echo "📋 Recent available tags:"
             git tag --sort=-creatordate | head -15
-            echo ""
-            echo "💡 Please check your commit hash or use one of the tags above."
             exit 1
           fi
           
@@ -76,7 +73,6 @@ jobs:
           cd openwrt
           make defconfig
           
-          # 注入目标架构和所需内核模块
           cat >> .config <<EOF
           CONFIG_TARGET_qualcommax=y
           CONFIG_TARGET_qualcommax_ipq60xx=y
@@ -95,7 +91,6 @@ jobs:
       - name: Compile Kmods
         run: |
           cd openwrt
-          # 编译指定模块（自动处理依赖）
           make package/kmod-xdp-sockets-diag/compile -j$(nproc) V=s || \
             make package/kmod-xdp-sockets-diag/compile -j1 V=s
             
