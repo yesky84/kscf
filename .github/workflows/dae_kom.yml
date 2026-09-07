@@ -9,7 +9,6 @@ on:
         default: 'fcbac91'
 
 env:
-  # ⚠️ 关键修改：指向 VIKINGYFY 的 Fork 仓库
   REPO_URL: https://github.com/VIKINGYFY/immortalwrt
   TARGET: qualcommax/ipq60xx
 
@@ -68,34 +67,72 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
-      - name: Generate Config for Kmods
+      - name: Generate Config & Find Kmods
         run: |
           cd openwrt
           make defconfig
           
+          # 注入目标架构
           cat >> .config <<EOF
           CONFIG_TARGET_qualcommax=y
           CONFIG_TARGET_qualcommax_ipq60xx=y
-          CONFIG_PACKAGE_kmod-xdp-sockets-diag=m
-          CONFIG_PACKAGE_kmod-sched-bpf=m
           EOF
-          
           make defconfig
+          
+          echo "=========================================="
+          echo "🔍 Searching for XDP/BPF related kmods..."
+          echo "=========================================="
+          
+          echo "📋 Matching symbols in current .config:"
+          grep -iE 'CONFIG_PACKAGE_kmod.*(xdp|bpf|sched)' .config || echo "(None matched in .config)"
+          
+          echo ""
+          echo "📋 Available kmod Makefiles containing xdp/bpf/sched:"
+          find package target -name Makefile -exec grep -lE 'PKG_NAME.*kmod.*(xdp|bpf|sched)' {} \; 2>/dev/null || echo "(No matching Makefiles found)"
+          
+          echo ""
+          echo "📋 Kernel config symbols (XDP/BPF/SCHED):"
+          grep -iE '(XDP_SOCKETS|BPF_SYSCALL|SCHED_BPF|NET_SCHED)' target/linux/qualcommax/config-* 2>/dev/null || echo "(Not found in kernel config)"
+          echo "=========================================="
 
-      - name: Download Dependencies
+      - name: Compile Kmods (Adaptive)
         run: |
           cd openwrt
-          make download -j$(nproc)
-          make download -j1 V=s || true
-
-      - name: Compile Kmods
-        run: |
-          cd openwrt
-          make package/kmod-xdp-sockets-diag/compile -j$(nproc) V=s || \
-            make package/kmod-xdp-sockets-diag/compile -j1 V=s
-            
-          make package/kmod-sched-bpf/compile -j$(nproc) V=s || \
-            make package/kmod-sched-bpf/compile -j1 V=s
+          
+          # 候选包名列表（按优先级排列）
+          CANDIDATES=(
+            "kmod-xdp-sockets-diag"
+            "kmod-xdp"
+            "kmod-bpf"
+            "kmod-sched-bpf"
+            "kmod-sched-core"
+            "kmod-net-sched"
+          )
+          
+          COMPILED=0
+          for pkg in "${CANDIDATES[@]}"; do
+            # 检查包是否存在于源码树中
+            if find package target -name Makefile -exec grep -l "PKG_NAME:=${pkg}" {} \; 2>/dev/null | grep -q .; then
+              echo "✅ Found $pkg, compiling..."
+              if make package/${pkg}/compile -j$(nproc) V=s || make package/${pkg}/compile -j1 V=s; then
+                COMPILED=$((COMPILED + 1))
+              else
+                echo "⚠️ Failed to compile $pkg"
+              fi
+            else
+              echo "⏭️ Skipping $pkg (not found in source tree)"
+            fi
+          done
+          
+          if [ "$COMPILED" -eq 0 ]; then
+            echo "❌ ERROR: No matching kmod packages were found or compiled!"
+            echo "💡 This likely means these modules are either built-in to the kernel"
+            echo "   or not yet defined as separate kmod packages in this commit."
+            echo "   Please check the 'Find Kmods' step output above."
+            exit 1
+          fi
+          
+          echo "✅ Successfully compiled $COMPILED kmod package(s)"
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
